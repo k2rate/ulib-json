@@ -1,0 +1,6 @@
+type: static-library
+name: ulib-json
+
+deps:
+  - github:k2rate/ulib ^4.0.0 [/ulib]
+  - github:k2rate/fops ^1.0.0 [/fops]

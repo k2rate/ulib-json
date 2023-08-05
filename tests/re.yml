@@ -1,0 +1,26 @@
+type: executable
+name: .tests
+
+platform.windows:
+  deps:
+    - vcpkg:gtest @ static-md
+
+platform.!windows:
+  deps:
+    - vcpkg:gtest
+
+deps:
+  - ulib-json
+
+cxxenv.msvc:
+  cxx-build-flags:
+    compiler:
+      - "/utf-8"
+    linker:
+      - "/DEBUG"
+  config.release:
+    cxx-build-flags:
+      compiler:
+        - "/GL /O2 /Oi /Gy"
+      linker:
+        - "/LTCG /OPT:REF /OPT:ICF"
