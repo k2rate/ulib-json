@@ -333,15 +333,13 @@ namespace ulib
         value_t type() const { return mType; }
 
         template <class StringT = ulib::string>
-        StringT dump()
+        StringT dump() const
         {
             size_t len = serialized_length(*this);
             StringT result(len);
             c_serialize(*this, (char *)&result[0]);
             return result;
         }
-
-        StringT to_string() { return dump(); }
 
         inline bool is_int() const { return mType == value_t::integer; }
         inline bool is_float() const { return mType == value_t::floating; }
