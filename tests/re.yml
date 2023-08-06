@@ -24,3 +24,7 @@ cxxenv.msvc:
         - "/GL /O2 /Oi /Gy"
       linker:
         - "/LTCG /OPT:REF /OPT:ICF"
+
+platform.linux|osx:
+  cxx-global-link-deps:
+    - pthread
