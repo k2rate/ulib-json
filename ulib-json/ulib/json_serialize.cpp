@@ -38,7 +38,7 @@ namespace ulib
         size_t serialized_array_length(const json &obj)
         {
             size_t result = 2; // []
-            auto arr = obj.array();
+            auto arr = obj.values();
             if (arr.size())
             {          
                 for (auto it = arr.begin();;)
@@ -169,7 +169,7 @@ namespace ulib
             *out = '[';
             out++;
 
-            auto arrit = obj.array();
+            auto arrit = obj.values();
             if (arrit.size())
             {
                 for (auto it = arrit.begin();;)
@@ -198,8 +198,6 @@ namespace ulib
             char *out = _out;
             size_t i64len;
             char i64buf[21];
-            const char *str;
-            size_t len;
 
             switch (obj.type())
             {

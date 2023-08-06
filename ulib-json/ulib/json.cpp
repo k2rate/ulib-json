@@ -4,6 +4,37 @@ namespace ulib
 {
     json::json(const json &v) { copy_construct_from_other(v); }
     json::json(json &&v) { move_construct_from_other(std::move(v)); }
+    json::json(value_t t)
+    {
+        switch (t)
+        {
+        case value_t::integer:
+            mIntVal = 0;
+            mType = value_t::integer;
+            break;
+        case value_t::floating:
+            mFloatVal = 0;
+            mType = value_t::floating;
+            break;
+        case value_t::boolean:
+            mBoolVal = false;
+            mType = value_t::boolean;
+            break;
+        case value_t::string:
+            initialize_as_string();
+            break;
+        case value_t::object:
+            initialize_as_object();
+            break;
+        case value_t::array:
+            initialize_as_array();
+            break;
+        default:
+            mType = value_t::null;
+            break;
+        }
+    }
+
     json::~json() { destroy_containers(); }
 
     json &json::operator=(const json &right)
@@ -226,7 +257,7 @@ namespace ulib
         mType = value_t::string;
     }
 
-    void json::move_construct_as_string(StringT &&other) 
+    void json::move_construct_as_string(StringT &&other)
     {
         new (&mString) StringT(std::move(other));
         mType = value_t::string;

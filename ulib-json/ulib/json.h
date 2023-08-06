@@ -108,9 +108,6 @@ namespace ulib
         using ObjectT = ulib::List<ItemT, AllocatorT>;
         using ArrayT = ulib::List<ThisT, AllocatorT>;
 
-        using ObjectSpanT = ulib::Span<ItemT>;
-        using ArraySpanT = ulib::Span<ThisT>;
-
         using Iterator = ulib::RandomAccessIterator<ThisT>;
         using ConstIterator = ulib::RandomAccessIterator<const ThisT>;
 
@@ -120,6 +117,9 @@ namespace ulib
         using pointer = ThisT *;
         using reference = ThisT &;
         using const_reference = const ThisT &;
+
+        static json object() { return json{value_t::object}; }
+        static json array() { return json{value_t::array}; }
 
         class parser
         {
@@ -179,6 +179,7 @@ namespace ulib
         json(const json &v);
         json(json &&v);
 
+        json(value_t t);
         json(StringViewT v) { construct_as_string(v); }
 
         template <class T, std::enable_if_t<std::is_same_v<T, StringT>, bool> = true>
@@ -320,13 +321,19 @@ namespace ulib
         const_reference operator[](StringViewT key) const { return at(key); }
         const_reference operator[](size_t idx) const { return at(idx); }
 
-        ObjectSpanT items() const { return implicit_const_touch_object(), mObject; }
-        ObjectSpanT items() { return implicit_const_touch_object(), mObject; }
+        span<const ItemT> items() const { return implicit_const_touch_object(), mObject; }
+        span<ItemT> items() { return implicit_touch_object(), mObject; }
 
-        ArraySpanT array() { return implicit_const_touch_array(), mArray; }
-        ArraySpanT array() const { return implicit_const_touch_array(), mArray; }
+        span<const json> values() const { return implicit_const_touch_array(), mArray; }
+        span<json> values() { return implicit_touch_array(), mArray; }
 
-        size_t size() const { return array().size(); }
+        iterator begin() { return implicit_const_touch_array(), mArray.begin(); }
+        const_iterator begin() const { return implicit_const_touch_array(), mArray.begin(); }
+
+        iterator end() { return implicit_const_touch_array(), mArray.begin(); }
+        const_iterator end() const { return implicit_const_touch_array(), mArray.begin(); }
+
+        size_t size() const { return values().size(); }
 
         reference push_back();
 

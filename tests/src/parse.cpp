@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 #include <ulib/json.h>
 
+#include <span>
+#include <vector>
+
 TEST(Tree, CanParseString)
 {
     auto value = ulib::json::parse(R"("hello")");
