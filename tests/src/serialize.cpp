@@ -56,7 +56,7 @@ TEST(Tree, Serialization)
 
 TEST(Tree, SerializationEscape)
 {
-    ulib::json value;
+    ulib::json value = "dfas";
     value = "full\nplak";
 
     ASSERT_EQ(value.dump(), "\"full\\nplak\"");

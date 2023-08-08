@@ -192,3 +192,4 @@ TEST(Tree, ParseObjectWithArrayWithOneString)
     ASSERT_TRUE(v0.is_string());
     ASSERT_TRUE(v0.get<std::string>() == "norepeat");
 }
+

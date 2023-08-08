@@ -28,3 +28,6 @@ cxxenv.msvc:
 platform.linux|osx:
   cxx-global-link-deps:
     - pthread
+
+cxxenv.clang.cl:
+  cxx-standard: 20

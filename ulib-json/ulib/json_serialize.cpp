@@ -210,7 +210,7 @@ namespace ulib
 
             case value_t::floating: {
                 std::string str = std::to_string(obj.get<float>());
-                memcpy(out, str.data(), i64len);
+                memcpy(out, str.data(), str.size());
                 out += str.size();
             }
             break;

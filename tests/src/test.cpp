@@ -43,3 +43,16 @@ TEST(JsonTree, NestedObject)
         ASSERT_EQ(obj["object"]["text"].get<ulib::string>(), "test");
     }
 }
+
+TEST(JsonTree, Search)
+{
+    ulib::json value;
+    value["hellword"] = "test";
+    value["option"] = "check";
+
+    auto v = value.search("hellword");
+    ASSERT_TRUE(v != nullptr);
+    ASSERT_TRUE(v->get<ulib::string>() == "test");
+
+    // ASSERT_EQ(value.dump(), "\"full\\nplak\"");
+}

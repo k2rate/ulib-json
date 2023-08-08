@@ -4,6 +4,8 @@
 #include <ulib/string.h>
 #include <ulib/runtimeerror.h>
 
+#include <optional>
+
 namespace ulib
 {
     // template <class JsonTy, class T>
@@ -76,6 +78,7 @@ namespace ulib
             basic_item() : JsonT(), mName() {}
             basic_item(const basic_item &other) : JsonT(other), mName(other.mName) {}
             basic_item(StringViewT name) : JsonT(), mName(name) {}
+            ~basic_item() {}
 
             // ulib::string_view name() { return this->name(); }
             StringViewT name() const { return mName; }
@@ -180,7 +183,12 @@ namespace ulib
         json(json &&v);
 
         json(value_t t);
-        json(StringViewT v) { construct_as_string(v); }
+
+        template <class T, std::enable_if_t<is_argument_encoding_v<T, EncodingT>, bool> = true>
+        json(const T &v)
+        {
+            construct_as_string(StringViewT{v});
+        }
 
         template <class T, std::enable_if_t<std::is_same_v<T, StringT>, bool> = true>
         json(T &&v)
@@ -333,6 +341,22 @@ namespace ulib
         iterator end() { return implicit_const_touch_array(), mArray.begin(); }
         const_iterator end() const { return implicit_const_touch_array(), mArray.begin(); }
 
+        const json* search(StringViewT name) const
+        {
+            if (mType != value_t::object)
+                throw json::exception("json value must be an object");
+
+            return find_object_in_object(name);
+        }
+
+        json* search(StringViewT name)
+        {
+            if (mType != value_t::object)
+                throw json::exception("json value must be an object");
+
+            return find_object_in_object(name);
+        }
+
         size_t size() const { return values().size(); }
 
         reference push_back();
@@ -383,6 +407,11 @@ namespace ulib
 
         void destroy_containers();
 
+        json *find_object_in_object(StringViewT name);
+        const json *find_object_in_object(StringViewT name) const;
+
+        value_t mType;
+
         union {
             bool mBoolVal;
             float mFloatVal;
@@ -392,8 +421,6 @@ namespace ulib
             ObjectT mObject;
             ArrayT mArray;
         };
-
-        value_t mType;
 
         static size_t serialized_length(const json &obj);
         static char *c_serialize(const json &obj, char *_out);

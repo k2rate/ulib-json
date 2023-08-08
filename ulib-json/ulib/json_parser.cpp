@@ -361,7 +361,6 @@ namespace ulib
 
     StringT json::parser::parse_quote_end_string()
     {
-        auto oldIt = mIt;
         size_t size = quote_end_string_size();
         StringT result(size);
 

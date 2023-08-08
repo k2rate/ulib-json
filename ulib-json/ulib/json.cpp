@@ -177,7 +177,11 @@ namespace ulib
     void json::implicit_set_string(StringViewT other)
     {
         if (mType == value_t::string)
+        {
             mString.assign(other);
+            return;
+        }
+            
 
         if (mType != value_t::null)
             throw json::exception("value must be an string or null");
@@ -189,7 +193,11 @@ namespace ulib
     void json::implicit_move_set_string(StringT &&other)
     {
         if (mType == value_t::string)
+        {
             mString.assign(std::move(other));
+            return;
+        }
+            
 
         if (mType != value_t::null)
             throw json::exception("value must be an string or null");
@@ -321,6 +329,24 @@ namespace ulib
         default:
             break;
         }
+    }
+
+    json *json::find_object_in_object(StringViewT name)
+    {
+        for (auto &obj : mObject)
+            if (obj.name() == name)
+                return &obj;
+        
+        return nullptr;
+    }
+
+    const json *json::find_object_in_object(StringViewT name) const
+    {
+        for (auto &obj : mObject)
+            if (obj.name() == name)
+                return &obj;
+        
+        return nullptr;
     }
 
 } // namespace ulib
