@@ -155,7 +155,7 @@ namespace ulib
 
     void json::parser::parse_object(json *out)
     {
-        // out->force_object();
+        *out = json::object();
 
         while (true)
         {
@@ -196,6 +196,7 @@ namespace ulib
 
     void json::parser::parse_array(json *out)
     {
+        *out = json::array();
         // out->force_array();
 
         skip_spaces(); // TODO: Check is duplicate

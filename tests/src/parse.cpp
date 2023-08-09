@@ -193,3 +193,26 @@ TEST(Tree, ParseObjectWithArrayWithOneString)
     ASSERT_TRUE(v0.get<std::string>() == "norepeat");
 }
 
+TEST(Tree, ParseEmptyArray)
+{
+    auto value = ulib::json::parse(R"([])");
+
+    ASSERT_TRUE(value.is_array());
+    ASSERT_TRUE(value.values().size() == 0);
+}
+
+TEST(Tree, ParseEmptyObject)
+{
+    auto value = ulib::json::parse(R"({})");
+
+    ASSERT_TRUE(value.is_object());
+    ASSERT_TRUE(value.items().size() == 0);
+}
+
+TEST(Tree, ParseEmptyString)
+{
+    auto value = ulib::json::parse(R"("")");
+
+    ASSERT_TRUE(value.is_string());
+    ASSERT_TRUE(value.get<ulib::string_view>().size() == 0);
+}
