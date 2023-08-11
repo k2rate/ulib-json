@@ -377,7 +377,7 @@ namespace ulib
         value_t type() const { return mType; }
 
         template <class TStringT = ulib::string, class TEncodingT = string_encoding_t<TStringT>,
-                  std::enable_if_t<!std::is_same_v<TEncodingT, missing_type>, bool> = true>
+                  std::enable_if_t<!std::is_same_v<TEncodingT, missing_type> && is_string_v<TStringT>, bool> = true>
         TStringT dump() const
         {
             size_t len = serialized_length(*this);
