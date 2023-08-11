@@ -56,3 +56,287 @@ TEST(JsonTree, Search)
 
     // ASSERT_EQ(value.dump(), "\"full\\nplak\"");
 }
+
+TEST(JsonTree, EncodingsInConstruct)
+{
+    {
+        ulib::json value = "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = u8"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::string) "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::u8string)u8"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::u16string)u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::u32string)U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::wstring)L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (std::string) "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (std::u16string)u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (std::u32string)U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (std::wstring)L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::string_view) "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::u8string_view)u8"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::u16string_view)u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::u32string_view)U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (ulib::wstring_view)L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (std::string_view) "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (std::u8string_view)u8"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (std::u16string_view)u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (std::u32string_view)U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value = (std::wstring_view)L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    // ASSERT_EQ(value.dump(), "\"full\\nplak\"");
+}
+
+TEST(JsonTree, EncodingsInAssignment)
+{
+    {
+        ulib::json value;
+        value = "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = u8"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::string) "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::u8string)u8"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::u16string)u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::u32string)U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::wstring)L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (std::string) "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (std::u16string)u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (std::u32string)U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (std::wstring)L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::string_view) "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::u8string_view)u8"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::u16string_view)u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::u32string_view)U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (ulib::wstring_view)L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (std::string_view) "hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (std::u8string_view)u8"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (std::u16string_view)u"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (std::u32string_view)U"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+
+    {
+        ulib::json value;
+        value = (std::wstring_view)L"hello";
+        ASSERT_EQ(value.dump(), R"("hello")");
+    }
+}
+
+TEST(JsonTree, CombineEncodings)
+{
+    ulib::json value = u8"hello";
+    value = U"world";
+
+    ulib::u16string u16str = value.get<ulib::u16string>();
+    std::wstring wstr = value.dump<std::wstring>();
+
+    ASSERT_TRUE(u16str == u"world");
+    ASSERT_TRUE(wstr == L"\"world\"");
+}

@@ -56,8 +56,59 @@ TEST(Tree, Serialization)
 
 TEST(Tree, SerializationEscape)
 {
-    ulib::json value = "dfas";
-    value = "full\nplak";
+    {
+        ulib::json value0 = "one\ntwo\nthree";
+        ulib::json value1 = ulib::json::parse(value0.dump());
 
-    ASSERT_EQ(value.dump(), "\"full\\nplak\"");
+        ASSERT_TRUE(value1.dump().contains("\\n"));
+        ASSERT_EQ(value0.dump(), value1.dump());
+    }
+
+    {
+        ulib::json value0 = "one\ttwo\tthree";
+        ulib::json value1 = ulib::json::parse(value0.dump());
+
+        ASSERT_TRUE(value1.dump().contains("\\t"));
+        ASSERT_EQ(value0.dump(), value1.dump());
+    }
+
+    {
+        ulib::json value0 = "one\rtwo\rthree";
+        ulib::json value1 = ulib::json::parse(value0.dump());
+
+        ASSERT_TRUE(value1.dump().contains("\\r"));
+        ASSERT_EQ(value0.dump(), value1.dump());
+    }
+
+    {
+        ulib::json value0 = "one\"two\"three";
+        ulib::json value1 = ulib::json::parse(value0.dump());
+
+        ASSERT_TRUE(value1.dump().contains("\\\""));
+        ASSERT_EQ(value0.dump(), value1.dump());
+    }
+
+    {
+        ulib::json value0 = "one\\two\\three";
+        ulib::json value1 = ulib::json::parse(value0.dump());
+
+        ASSERT_TRUE(value1.dump().contains("\\\\"));
+        ASSERT_EQ(value0.dump(), value1.dump());
+    }
+
+    {
+        ulib::json value0 = "one\btwo\bthree";
+        ulib::json value1 = ulib::json::parse(value0.dump());
+
+        ASSERT_TRUE(value1.dump().contains("\\b"));
+        ASSERT_EQ(value0.dump(), value1.dump());
+    }
+
+    {
+        ulib::json value0 = "one\ftwo\fthree";
+        ulib::json value1 = ulib::json::parse(value0.dump());
+
+        ASSERT_TRUE(value1.dump().contains("\\f"));
+        ASSERT_EQ(value0.dump(), value1.dump());
+    }
 }

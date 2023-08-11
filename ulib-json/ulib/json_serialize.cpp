@@ -40,7 +40,7 @@ namespace ulib
             size_t result = 2; // []
             auto arr = obj.values();
             if (arr.size())
-            {          
+            {
                 for (auto it = arr.begin();;)
                 {
                     result += serialized_length(*it);
@@ -85,7 +85,7 @@ namespace ulib
 
                 for (const char *it = view.begin().raw(); it != view.end().raw(); it++)
                 {
-                    if (*it == '\n')
+                    if (*it == '\\' || *it == '\"' || *it == '\n' || *it == '\r' || *it == '\t' || *it == '\b' || *it == '\f')
                     {
                         result += 2;
                     }
@@ -130,7 +130,7 @@ namespace ulib
 
             auto objit = obj.items();
             if (objit.size())
-            {              
+            {
                 for (auto it = objit.begin();;)
                 {
                     *out = '\"';
@@ -225,15 +225,51 @@ namespace ulib
 
                     for (const char *it = view.begin().raw(); it != view.end().raw(); it++)
                     {
-                        if (*it == '\n')
+                        switch (*it)
                         {
+                        case '\\':
+                            *out = '\\';
+                            out++;
+                            *out = '\\';
+                            out++;
+                            break;
+                        case '\"':
+                            *out = '\\';
+                            out++;
+                            *out = '\"';
+                            out++;
+                            break;
+                        case '\n':
                             *out = '\\';
                             out++;
                             *out = 'n';
                             out++;
-                        }
-                        else
-                        {
+                            break;
+                        case '\r':
+                            *out = '\\';
+                            out++;
+                            *out = 'r';
+                            out++;
+                            break;
+                        case '\t':
+                            *out = '\\';
+                            out++;
+                            *out = 't';
+                            out++;
+                            break;
+                        case '\b':
+                            *out = '\\';
+                            out++;
+                            *out = 'b';
+                            out++;
+                            break;
+                        case '\f':
+                            *out = '\\';
+                            out++;
+                            *out = 'f';
+                            out++;
+                            break;
+                        default:
                             *out = *it;
                             out++;
                         }

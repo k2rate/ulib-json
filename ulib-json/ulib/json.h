@@ -184,10 +184,10 @@ namespace ulib
 
         json(value_t t);
 
-        template <class T, std::enable_if_t<is_argument_encoding_v<T, EncodingT>, bool> = true>
+        template <class T, class TEncodingT = argument_encoding_or_die_t<T>>
         json(const T &v)
         {
-            construct_as_string(StringViewT{v});
+            construct_as_string(StringViewT{ulib::str(ulib::u8(v))});
         }
 
         template <class T, std::enable_if_t<std::is_same_v<T, StringT>, bool> = true>
@@ -213,7 +213,11 @@ namespace ulib
 
         ~json();
 
-        void assign(StringViewT right) { implicit_set_string(right); }
+        template <class T, class TEncodingT = argument_encoding_or_die_t<T>>
+        void assign(const T &right)
+        {
+            implicit_set_string(ulib::str(ulib::u8(right)));
+        }
 
         template <class T, std::enable_if_t<std::is_same_v<T, StringT>, bool> = true>
         void assign(T &&right)
@@ -270,13 +274,23 @@ namespace ulib
             throw json::exception("json invalid get type");
         }
 
-        template <class T, class VT = typename T::value_type,
-                  std::enable_if_t<ulib::is_string_kind_v<T> && (std::is_same_v<VT, char> || std::is_same_v<VT, char8>),
-                                   bool> = true>
+        template <class T, class VT = typename T::value_type, class TEncodingT = argument_encoding_or_die_t<T>,
+                  std::enable_if_t<is_string_v<T>, bool> = true>
         T get() const
         {
             if (mType == value_t::string)
-                return T((VT *)mString.Data(), mString.Size());
+                return ulib::Convert<TEncodingT>(ulib::u8(mString));
+
+            throw json::exception("json invalid get type");
+        }
+
+        template <
+            class T, class VT = typename T::value_type, class TEncodingT = argument_encoding_or_die_t<T>,
+            std::enable_if_t<is_string_view_v<T> && is_encodings_raw_movable_v<EncodingT, TEncodingT>, bool> = true>
+        T get() const
+        {
+            if (mType == value_t::string)
+                return ulib::string_view{mString.raw_data(), mString.size()};
 
             throw json::exception("json invalid get type");
         }
@@ -293,15 +307,14 @@ namespace ulib
             return assign(right), *this;
         }
 
-        template <class T, class VT = typename T::value_type,
-                  std::enable_if_t<ulib::is_string_v<T> && (std::is_same_v<VT, char> || std::is_same_v<VT, char8>),
-                                   bool> = true>
+        template <class T, class VT = typename T::value_type, std::enable_if_t<ulib::is_string_kind_v<T>, bool> = true>
         reference operator=(const T &right)
         {
-            return assign(right), *this;
+            return assign(ulib::str(ulib::u8(right))), *this;
         }
 
-        template <class T, std::enable_if_t<std::is_same_v<T, char> || std::is_same_v<T, char8>, bool> = true>
+        template <class T, class KEncodingT = literal_encoding_t<T>,
+                  std::enable_if_t<!std::is_same_v<KEncodingT, missing_type>, bool> = true>
         reference operator=(const T *right)
         {
             return assign(right), *this;
@@ -341,7 +354,7 @@ namespace ulib
         iterator end() { return implicit_const_touch_array(), mArray.begin(); }
         const_iterator end() const { return implicit_const_touch_array(), mArray.begin(); }
 
-        const json* search(StringViewT name) const
+        const json *search(StringViewT name) const
         {
             if (mType != value_t::object)
                 throw json::exception("json value must be an object");
@@ -349,7 +362,7 @@ namespace ulib
             return find_object_in_object(name);
         }
 
-        json* search(StringViewT name)
+        json *search(StringViewT name)
         {
             if (mType != value_t::object)
                 throw json::exception("json value must be an object");
@@ -363,13 +376,14 @@ namespace ulib
 
         value_t type() const { return mType; }
 
-        template <class StringT = ulib::string>
-        StringT dump() const
+        template <class TStringT = ulib::string, class TEncodingT = string_encoding_t<TStringT>,
+                  std::enable_if_t<!std::is_same_v<TEncodingT, missing_type>, bool> = true>
+        TStringT dump() const
         {
             size_t len = serialized_length(*this);
             StringT result(len);
             c_serialize(*this, (char *)&result[0]);
-            return result;
+            return ulib::Convert<TEncodingT>(ulib::u8(result));
         }
 
         inline bool is_int() const { return mType == value_t::integer; }

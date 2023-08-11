@@ -229,10 +229,7 @@ namespace ulib
         }
     }
 
-    void json::parser::parse_string(json *out)
-    {
-        out->assign(parse_quote_end_string());
-    }
+    void json::parser::parse_string(json *out) { out->assign(parse_quote_end_string()); }
 
     void json::parser::parse_integer(json *out)
     {
@@ -383,6 +380,10 @@ namespace ulib
                     *it = '\r';
                 else if (*mIt == 't')
                     *it = '\t';
+                else if (*mIt == 'b')
+                    *it = '\b';
+                else if (*mIt == 'f')
+                    *it = '\f';
                 else
                     *it = *mIt;
                 ++it;
