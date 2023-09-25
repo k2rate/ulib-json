@@ -351,8 +351,8 @@ namespace ulib
         iterator begin() { return implicit_const_touch_array(), mArray.begin(); }
         const_iterator begin() const { return implicit_const_touch_array(), mArray.begin(); }
 
-        iterator end() { return implicit_const_touch_array(), mArray.begin(); }
-        const_iterator end() const { return implicit_const_touch_array(), mArray.begin(); }
+        iterator end() { return implicit_const_touch_array(), mArray.end(); }
+        const_iterator end() const { return implicit_const_touch_array(), mArray.end(); }
 
         const json *search(StringViewT name) const
         {
