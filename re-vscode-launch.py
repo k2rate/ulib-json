@@ -1,9 +1,12 @@
 import json
 import os
+import os.path
 
 workspaceFolder = os.getcwd()
 
 meta = None
+
+
 with open('.re-cache/meta/full.json', 'r') as outfile:
     meta = json.load(outfile)
 if meta == None:
@@ -98,6 +101,9 @@ for module_info in meta_data:
 configurations = current_launch + configurations
 
 data = {'version': '0.2.0', 'configurations': configurations}
+
+if not os.path.exists('.vscode'):
+    os.makedirs('.vscode')
 
 with open('.vscode/launch.json', 'w') as outfile:
     outfile.write(json.dumps(data, indent=4))
