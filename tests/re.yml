@@ -1,6 +1,9 @@
 type: executable
 name: .tests
 
+load-context.!standalone:
+  enabled: false
+
 platform.windows:
   deps:
     - vcpkg:gtest @ static-md
