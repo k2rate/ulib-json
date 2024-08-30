@@ -2,9 +2,9 @@ type: static-library
 name: ulib-json
 
 deps:
-  - github:k2rate/ulib ^5.0.0 [/ulib]
-  - github:k2rate/fops ^1.0.0 [/fops]
+  - github:k2rate/ulib ^5.0.0
+  - github:k2rate/fops ^1.0.0
 
 
-cxxenv.clang.cl:
-  cxx-standard: 20
+# cxxenv.clang.cl:
+#   cxx-standard: 20
