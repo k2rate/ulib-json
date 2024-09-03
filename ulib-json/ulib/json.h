@@ -121,6 +121,29 @@ namespace ulib
         using reference = ThisT &;
         using const_reference = const ThisT &;
 
+        static StringViewT type_to_string(value_t t)
+        {
+            switch (t)
+            {
+            case value_t::null:
+                return "null";
+            case value_t::integer:
+                return "integer";
+            case value_t::floating:
+                return "floating";
+            case value_t::boolean:
+                return "boolean";
+            case value_t::array:
+                return "array";
+            case value_t::object:
+                return "object";
+            case value_t::string:
+                return "string";
+            }
+
+            return "unknown";
+        }
+
         static json object() { return json{value_t::object}; }
         static json array() { return json{value_t::array}; }
 
@@ -251,7 +274,7 @@ namespace ulib
             if (mType == value_t::integer)
                 return T(mIntVal);
 
-            throw json::exception("json invalid get type");
+            throw json::exception(ulib::string{"json invalid get() type. expected: floating or integer. current: "} + type_to_string(mType));
         }
 
         template <class T, std::enable_if_t<std::is_same_v<T, bool>, bool> = true>
@@ -260,7 +283,7 @@ namespace ulib
             if (mType == value_t::boolean)
                 return T(mBoolVal);
 
-            throw json::exception("json invalid get type");
+            throw json::exception(ulib::string{"json invalid get() type. expected: boolean. current: "} + type_to_string(mType));
         }
 
         template <class T, std::enable_if_t<std::is_integral_v<T> && !std::is_same_v<T, bool>, bool> = true>
@@ -271,7 +294,7 @@ namespace ulib
             if (mType == value_t::floating)
                 return T(mIntVal);
 
-            throw json::exception("json invalid get type");
+            throw json::exception(ulib::string{"json invalid get() type. expected: integer or floating. current: "} + type_to_string(mType));
         }
 
         template <class T, class VT = typename T::value_type, class TEncodingT = argument_encoding_or_die_t<T>,
@@ -281,7 +304,7 @@ namespace ulib
             if (mType == value_t::string)
                 return ulib::Convert<TEncodingT>(ulib::u8(mString));
 
-            throw json::exception("json invalid get type");
+            throw json::exception(ulib::string{"json invalid get() type. expected: string. current: "} + type_to_string(mType));
         }
 
         template <
@@ -386,7 +409,7 @@ namespace ulib
 
         inline void remove(StringViewT key)
         {
-             if (mType != value_t::object)
+            if (mType != value_t::object)
                 throw json::exception("json value must be an object");
 
             for (auto it = mObject.begin(); it != mObject.end(); it++)
@@ -406,7 +429,7 @@ namespace ulib
         inline bool is_object() const { return mType == value_t::object; }
         inline bool is_number() const { return mType == value_t::integer || mType == value_t::floating; }
         inline bool is_bool() const { return mType == value_t::boolean; }
-        inline bool is_null() const {return mType == value_t::null; }
+        inline bool is_null() const { return mType == value_t::null; }
 
     private:
         void initialize_as_string();
