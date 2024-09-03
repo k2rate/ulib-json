@@ -315,7 +315,7 @@ namespace ulib
             if (mType == value_t::string)
                 return ulib::string_view{mString.raw_data(), mString.size()};
 
-            throw json::exception("json invalid get type");
+            throw json::exception(ulib::string{"json invalid get() type. expected: string. current: "} + type_to_string(mType));
         }
 
         template <class T, std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
@@ -380,7 +380,7 @@ namespace ulib
         const json *search(StringViewT name) const
         {
             if (mType != value_t::object)
-                throw json::exception("json value must be an object");
+                throw json::exception(ulib::string{"failed to search via key: \""} + name + "\" json value must be an object");
 
             return find_object_in_object(name);
         }
@@ -388,7 +388,7 @@ namespace ulib
         json *search(StringViewT name)
         {
             if (mType != value_t::object)
-                throw json::exception("json value must be an object");
+                throw json::exception(ulib::string{"failed to search via key: \""} + name + "\" json value must be an object");
 
             return find_object_in_object(name);
         }
@@ -410,7 +410,7 @@ namespace ulib
         inline void remove(StringViewT key)
         {
             if (mType != value_t::object)
-                throw json::exception("json value must be an object");
+                throw json::exception(ulib::string{"failed to remove key: \""} + key + "\" json value must be an object");
 
             for (auto it = mObject.begin(); it != mObject.end(); it++)
             {
