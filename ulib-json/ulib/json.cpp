@@ -138,7 +138,7 @@ namespace ulib
             return false;
 
         if (mType != value_t::null)
-            throw json::exception("value must be an string or null");
+            throw json::exception(ulib::string{"json value must be a string or null while implicit touch. current: "} + type_to_string(mType));
 
         return initialize_as_string(), true;
     }
@@ -149,7 +149,7 @@ namespace ulib
             return false;
 
         if (mType != value_t::null)
-            throw json::exception("value must be an object or null");
+            throw json::exception(ulib::string{"json value must be an object or null while implicit touch. current: "} + type_to_string(mType));
 
         return initialize_as_object(), true;
     }
@@ -160,7 +160,7 @@ namespace ulib
             return false;
 
         if (mType != value_t::null)
-            throw json::exception("value must be an array or null");
+            throw json::exception(ulib::string{"json value must be an array or null while implicit touch. current: "} + type_to_string(mType));
 
         return initialize_as_array(), true;
     }
@@ -168,19 +168,19 @@ namespace ulib
     void json::implicit_const_touch_string() const
     {
         if (mType != value_t::string)
-            throw json::exception("value must be an string or null");
+            throw json::exception(ulib::string{"json value must be a string or null while implicit const touch. current: "} + type_to_string(mType));
     }
 
     void json::implicit_const_touch_object() const
     {
         if (mType != value_t::object)
-            throw json::exception("value must be an object or null");
+            throw json::exception(ulib::string{"json value must be an object or null while implicit const touch. current: "} + type_to_string(mType));
     }
 
     void json::implicit_const_touch_array() const
     {
         if (mType != value_t::array)
-            throw json::exception("value must be an array or null");
+            throw json::exception(ulib::string{"json value must be an array or null while implicit const touch. current: "} + type_to_string(mType));
     }
 
     void json::implicit_set_string(StringViewT other)
@@ -192,7 +192,7 @@ namespace ulib
         }
 
         if (mType != value_t::null)
-            throw json::exception("value must be an string or null");
+            throw json::exception(ulib::string{"json value must be a string or null while implicit set string. current: "} + type_to_string(mType));
 
         new (&mString) StringT(other);
         mType = value_t::string;
@@ -207,7 +207,7 @@ namespace ulib
         }
 
         if (mType != value_t::null)
-            throw json::exception("value must be an string or null");
+            throw json::exception(ulib::string{"json value must be a string or null while implicit set string. current: "} + type_to_string(mType));
 
         new (&mString) StringT(std::move(other));
         mType = value_t::string;
@@ -228,7 +228,7 @@ namespace ulib
         }
 
         if (mType != value_t::null)
-            throw json::exception("value must be an numeric or null");
+            throw json::exception(ulib::string{"json value must be a numeric or null while implicit set string. current: "} + type_to_string(mType));
 
         mFloatVal = other, mType = value_t::floating;
     }
@@ -247,7 +247,7 @@ namespace ulib
         }
 
         if (mType != value_t::null)
-            throw json::exception("value must be an numeric or null");
+            throw json::exception(ulib::string{"json value must be a numeric or null while implicit set string. current: "} + type_to_string(mType));
 
         mIntVal = other, mType = value_t::integer;
     }
@@ -261,7 +261,7 @@ namespace ulib
         }
 
         if (mType != value_t::null)
-            throw json::exception("value must be an numeric or null");
+            throw json::exception(ulib::string{"json value must be a boolean or null while implicit set string. current: "} + type_to_string(mType));
 
         mIntVal = other, mType = value_t::boolean;
     }
