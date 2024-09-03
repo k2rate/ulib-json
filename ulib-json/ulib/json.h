@@ -380,7 +380,7 @@ namespace ulib
         const json *search(StringViewT name) const
         {
             if (mType != value_t::object)
-                throw json::exception(ulib::string{"failed to search via key: \""} + name + "\" json value must be an object");
+                throw json::exception(ulib::string{"failed to search via key: \""} + name + "\" json value must be an object. current: " + type_to_string(mType));
 
             return find_object_in_object(name);
         }
@@ -388,7 +388,7 @@ namespace ulib
         json *search(StringViewT name)
         {
             if (mType != value_t::object)
-                throw json::exception(ulib::string{"failed to search via key: \""} + name + "\" json value must be an object");
+                throw json::exception(ulib::string{"failed to search via key: \""} + name + "\" json value must be an object. current: " + type_to_string(mType));
 
             return find_object_in_object(name);
         }
@@ -410,7 +410,7 @@ namespace ulib
         inline void remove(StringViewT key)
         {
             if (mType != value_t::object)
-                throw json::exception(ulib::string{"failed to remove key: \""} + key + "\" json value must be an object");
+                throw json::exception(ulib::string{"failed to remove key: \""} + key + "\" json value must be an object. current: " + type_to_string(mType));
 
             for (auto it = mObject.begin(); it != mObject.end(); it++)
             {
