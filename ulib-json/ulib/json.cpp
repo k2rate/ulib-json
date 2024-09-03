@@ -86,19 +86,28 @@ namespace ulib
 
     const json &json::find_if_exists(StringViewT name) const
     {
+        if (mType != value_t::object)
+            throw exception{ulib::string{"in json find_if_exists(\""} + name + "\")" + " json must be an object"};
+
         implicit_const_touch_object();
 
         for (auto &obj : mObject)
             if (obj.name() == name)
                 return obj.value();
 
-        throw exception{"json object key not found"};
+        throw exception{ulib::string{"in json find_if_exists(\""} + name + "\")" + " key not found"};
     }
 
     const json &json::find_if_exists(size_t idx) const
     {
+        if (mType != value_t::array)
+            throw exception{ulib::string{"in json find_if_exists("} + std::to_string(idx) + ")" +
+                            " json must be an array"};
+
         if (idx >= mArray.size())
-            throw exception{"json array index out of range"};
+            throw exception{ulib::string{"in json find_if_exists("} + std::to_string(idx) + ")" +
+                            " index out of range. Array size is " + std::to_string(mArray.size())};
+        // throw exception{"json array index out of range"};
 
         return mArray[idx];
     }
@@ -181,7 +190,6 @@ namespace ulib
             mString.assign(other);
             return;
         }
-            
 
         if (mType != value_t::null)
             throw json::exception("value must be an string or null");
@@ -197,7 +205,6 @@ namespace ulib
             mString.assign(std::move(other));
             return;
         }
-            
 
         if (mType != value_t::null)
             throw json::exception("value must be an string or null");
@@ -336,7 +343,7 @@ namespace ulib
         for (auto &obj : mObject)
             if (obj.name() == name)
                 return &obj;
-        
+
         return nullptr;
     }
 
@@ -345,7 +352,7 @@ namespace ulib
         for (auto &obj : mObject)
             if (obj.name() == name)
                 return &obj;
-        
+
         return nullptr;
     }
 
