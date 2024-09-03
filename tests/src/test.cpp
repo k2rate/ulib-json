@@ -340,3 +340,19 @@ TEST(JsonTree, CombineEncodings)
     ASSERT_TRUE(u16str == u"world");
     ASSERT_TRUE(wstr == L"\"world\"");
 }
+
+TEST(JsonTree, Removing)
+{
+    ulib::json value;
+    value["one"] = "one";
+    value["two"] = "two";
+    value["three"] = "three";
+
+    ASSERT_TRUE(value.items().size() == 3);
+    value.remove("two");
+    ASSERT_TRUE(value.items().size() == 2);
+
+    ASSERT_TRUE(value["one"].is_string());
+    ASSERT_TRUE(value["two"].is_null());
+    ASSERT_TRUE(value["three"].is_string());
+}   

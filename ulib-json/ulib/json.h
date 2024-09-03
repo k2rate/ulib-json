@@ -371,9 +371,7 @@ namespace ulib
         }
 
         size_t size() const { return values().size(); }
-
         reference push_back();
-
         value_t type() const { return mType; }
 
         template <class TStringT = ulib::string, class TEncodingT = string_encoding_t<TStringT>,
@@ -386,6 +384,21 @@ namespace ulib
             return ulib::Convert<TEncodingT>(ulib::u8(result));
         }
 
+        inline void remove(StringViewT key)
+        {
+             if (mType != value_t::object)
+                throw json::exception("json value must be an object");
+
+            for (auto it = mObject.begin(); it != mObject.end(); it++)
+            {
+                if (it->name() == key)
+                {
+                    mObject.erase(it);
+                    return;
+                }
+            }
+        }
+
         inline bool is_int() const { return mType == value_t::integer; }
         inline bool is_float() const { return mType == value_t::floating; }
         inline bool is_string() const { return mType == value_t::string; }
@@ -393,6 +406,7 @@ namespace ulib
         inline bool is_object() const { return mType == value_t::object; }
         inline bool is_number() const { return mType == value_t::integer || mType == value_t::floating; }
         inline bool is_bool() const { return mType == value_t::boolean; }
+        inline bool is_null() const {return mType == value_t::null; }
 
     private:
         void initialize_as_string();
