@@ -168,19 +168,19 @@ namespace ulib
     void json::implicit_const_touch_string() const
     {
         if (mType != value_t::string)
-            throw json::exception(ulib::string{"json value must be a string or null while implicit const touch. current: "} + type_to_string(mType));
+            throw json::exception(ulib::string{"json value must be a string while implicit const touch. current: "} + type_to_string(mType));
     }
 
     void json::implicit_const_touch_object() const
     {
         if (mType != value_t::object)
-            throw json::exception(ulib::string{"json value must be an object or null while implicit const touch. current: "} + type_to_string(mType));
+            throw json::exception(ulib::string{"json value must be an object while implicit const touch. current: "} + type_to_string(mType));
     }
 
     void json::implicit_const_touch_array() const
     {
         if (mType != value_t::array)
-            throw json::exception(ulib::string{"json value must be an array or null while implicit const touch. current: "} + type_to_string(mType));
+            throw json::exception(ulib::string{"json value must be an array while implicit const touch. current: "} + type_to_string(mType));
     }
 
     void json::implicit_set_string(StringViewT other)
