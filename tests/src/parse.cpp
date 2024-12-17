@@ -216,3 +216,10 @@ TEST(Tree, ParseEmptyString)
     ASSERT_TRUE(value.is_string());
     ASSERT_TRUE(value.get<ulib::string_view>().size() == 0);
 }
+
+
+TEST(Tree, ParseNull)
+{
+    auto value = ulib::json::parse(R"(null)");
+    ASSERT_TRUE(value.is_null());
+}

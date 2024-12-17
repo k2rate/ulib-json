@@ -170,6 +170,7 @@ namespace ulib
             void parse_string(json *out);
             void parse_integer(json *out);
             void parse_boolean(json *out);
+            void parse_null(json *out);
 
             void step_through(char c);
 
@@ -247,6 +248,8 @@ namespace ulib
         {
             implicit_set_string(ulib::str(ulib::u8(right.generic_u8string())));
         }
+
+        void assign(value_t t) { implicit_set_type(t); }
 
         template <class T, std::enable_if_t<std::is_same_v<T, StringT>, bool> = true>
         void assign(T &&right)
@@ -364,10 +367,8 @@ namespace ulib
             return assign(right), *this;
         }
 
-        reference operator=(const std::filesystem::path& path)
-        {
-            return assign(path), *this;
-        }
+        reference operator=(const std::filesystem::path &path) { return assign(path), *this; }
+        reference operator=(value_t t) { return assign(t), *this; }
 
         reference operator=(const_reference right);
         reference operator=(json &&right);
@@ -497,11 +498,14 @@ namespace ulib
         void implicit_const_touch_object() const;
         void implicit_const_touch_array() const;
 
+        void implicit_set_type(value_t t);
         void implicit_set_string(StringViewT other);
         void implicit_move_set_string(StringT &&other);
         void implicit_set_float(float other);
         void implicit_set_integer(int64_t other);
         void implicit_set_boolean(bool other);
+
+        void construct_from_type(value_t t);
 
         void move_construct_as_string(StringT &&other);
         void construct_as_string(StringViewT other);

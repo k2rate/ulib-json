@@ -148,6 +148,9 @@ namespace ulib
         case value_t::boolean:
             parse_boolean(out);
             break;
+        case value_t::null:
+            parse_null(out);
+            break;
         default:
             throw ParseError{"Unexpected type of value"};
         }
@@ -318,6 +321,29 @@ namespace ulib
         else
         {
             throw ParseError{"Invalid boolean constant"};
+        }
+
+        mIt++;
+    }
+
+    void json::parser::parse_null(json *out)
+    {
+        if (*mIt == 'u') // n'u'll
+        {
+            step();
+            if (*mIt != 'l')
+                throw ParseError{"Invalid 'null' constant"};
+
+            step();
+            if (*mIt != 'l')
+                throw ParseError{"Invalid 'null' constant"};
+
+            // it is already null
+            // out->assign(value_t::null);
+        }
+        else
+        {
+            throw ParseError{"Invalid 'null' constant"};
         }
 
         mIt++;
