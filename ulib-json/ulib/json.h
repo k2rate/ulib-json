@@ -5,6 +5,7 @@
 #include <ulib/runtimeerror.h>
 
 #include <optional>
+#include <filesystem>
 
 namespace ulib
 {
@@ -242,6 +243,11 @@ namespace ulib
             implicit_set_string(ulib::str(ulib::u8(right)));
         }
 
+        void assign(const std::filesystem::path &right)
+        {
+            implicit_set_string(ulib::str(ulib::u8(right.generic_u8string())));
+        }
+
         template <class T, std::enable_if_t<std::is_same_v<T, StringT>, bool> = true>
         void assign(T &&right)
         {
@@ -274,7 +280,8 @@ namespace ulib
             if (mType == value_t::integer)
                 return T(mIntVal);
 
-            throw json::exception(ulib::string{"json invalid get() type. expected: floating or integer. current: "} + type_to_string(mType));
+            throw json::exception(ulib::string{"json invalid get() type. expected: floating or integer. current: "} +
+                                  type_to_string(mType));
         }
 
         template <class T, std::enable_if_t<std::is_same_v<T, bool>, bool> = true>
@@ -283,7 +290,8 @@ namespace ulib
             if (mType == value_t::boolean)
                 return T(mBoolVal);
 
-            throw json::exception(ulib::string{"json invalid get() type. expected: boolean. current: "} + type_to_string(mType));
+            throw json::exception(ulib::string{"json invalid get() type. expected: boolean. current: "} +
+                                  type_to_string(mType));
         }
 
         template <class T, std::enable_if_t<std::is_integral_v<T> && !std::is_same_v<T, bool>, bool> = true>
@@ -294,7 +302,8 @@ namespace ulib
             if (mType == value_t::floating)
                 return T(mIntVal);
 
-            throw json::exception(ulib::string{"json invalid get() type. expected: integer or floating. current: "} + type_to_string(mType));
+            throw json::exception(ulib::string{"json invalid get() type. expected: integer or floating. current: "} +
+                                  type_to_string(mType));
         }
 
         template <class T, class VT = typename T::value_type, class TEncodingT = argument_encoding_or_die_t<T>,
@@ -304,7 +313,8 @@ namespace ulib
             if (mType == value_t::string)
                 return ulib::Convert<TEncodingT>(ulib::u8(mString));
 
-            throw json::exception(ulib::string{"json invalid get() type. expected: string. current: "} + type_to_string(mType));
+            throw json::exception(ulib::string{"json invalid get() type. expected: string. current: "} +
+                                  type_to_string(mType));
         }
 
         template <
@@ -315,10 +325,19 @@ namespace ulib
             if (mType == value_t::string)
                 return ulib::string_view{mString.raw_data(), mString.size()};
 
-            throw json::exception(ulib::string{"json invalid get() type. expected: string. current: "} + type_to_string(mType));
+            throw json::exception(ulib::string{"json invalid get() type. expected: string. current: "} +
+                                  type_to_string(mType));
         }
 
-        
+        template <class T, std::enable_if_t<std::is_same_v<T, std::filesystem::path>, bool> = true>
+        T get() const
+        {
+            if (mType == value_t::string)
+                return ulib::string_view{mString.raw_data(), mString.size()};
+
+            throw json::exception(ulib::string{"json invalid get() type. expected: string. current: "} +
+                                  type_to_string(mType));
+        }
 
         template <class T, std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
         reference operator=(T right)
@@ -345,12 +364,16 @@ namespace ulib
             return assign(right), *this;
         }
 
+        reference operator=(const std::filesystem::path& path)
+        {
+            return assign(path), *this;
+        }
+
         reference operator=(const_reference right);
         reference operator=(json &&right);
 
-
-        template<class T>
-        void assign(const std::optional<T>& right)
+        template <class T>
+        void assign(const std::optional<T> &right)
         {
             if (right)
                 assign(*right);
@@ -358,7 +381,7 @@ namespace ulib
                 mType = value_t::null;
         }
 
-        template<class T>
+        template <class T>
         std::optional<T> try_get() const
         {
             if (mType == value_t::null)
@@ -407,7 +430,8 @@ namespace ulib
         const json *search(StringViewT name) const
         {
             if (mType != value_t::object)
-                throw json::exception(ulib::string{"failed to search via key: \""} + name + "\" json value must be an object. current: " + type_to_string(mType));
+                throw json::exception(ulib::string{"failed to search via key: \""} + name +
+                                      "\" json value must be an object. current: " + type_to_string(mType));
 
             return find_object_in_object(name);
         }
@@ -415,7 +439,8 @@ namespace ulib
         json *search(StringViewT name)
         {
             if (mType != value_t::object)
-                throw json::exception(ulib::string{"failed to search via key: \""} + name + "\" json value must be an object. current: " + type_to_string(mType));
+                throw json::exception(ulib::string{"failed to search via key: \""} + name +
+                                      "\" json value must be an object. current: " + type_to_string(mType));
 
             return find_object_in_object(name);
         }
@@ -437,7 +462,8 @@ namespace ulib
         inline void remove(StringViewT key)
         {
             if (mType != value_t::object)
-                throw json::exception(ulib::string{"failed to remove key: \""} + key + "\" json value must be an object. current: " + type_to_string(mType));
+                throw json::exception(ulib::string{"failed to remove key: \""} + key +
+                                      "\" json value must be an object. current: " + type_to_string(mType));
 
             for (auto it = mObject.begin(); it != mObject.end(); it++)
             {

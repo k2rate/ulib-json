@@ -384,3 +384,31 @@ TEST(JsonTree, Optional)
     ASSERT_TRUE(value["five"].is_null());
     ASSERT_TRUE(value["six"].try_get<ulib::string>() == "six");
 }
+
+TEST(JsonTree, Path)
+{
+    std::optional<std::filesystem::path> one = "one";
+    std::optional<std::filesystem::path> two = std::nullopt;
+    std::filesystem::path three = "three";
+
+    ulib::json value;
+    value["one"].assign(one);
+    value["two"].assign(two);
+    value["three"].assign(three);
+
+    ASSERT_TRUE(value["one"].get<std::filesystem::path>() == "one");
+    ASSERT_TRUE(value["two"].type() == ulib::json::value_t::null);
+    ASSERT_TRUE(value["three"].try_get<std::filesystem::path>() == "three");
+
+    std::optional<std::filesystem::path> four = "four";
+    std::optional<std::filesystem::path> five = std::nullopt;
+    std::filesystem::path six = "six";
+
+    value["four"] = four;
+    value["five"] = five;
+    value["six"] = six;
+
+    ASSERT_TRUE(value["four"].get<std::filesystem::path>() == "four");
+    ASSERT_TRUE(value["five"].is_null());
+    ASSERT_TRUE(value["six"].try_get<std::filesystem::path>() == "six");
+}
