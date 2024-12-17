@@ -85,7 +85,8 @@ namespace ulib
 
                 for (const char *it = view.begin().raw(); it != view.end().raw(); it++)
                 {
-                    if (*it == '\\' || *it == '\"' || *it == '\n' || *it == '\r' || *it == '\t' || *it == '\b' || *it == '\f')
+                    if (*it == '\\' || *it == '\"' || *it == '\n' || *it == '\r' || *it == '\t' || *it == '\b' ||
+                        *it == '\f')
                     {
                         result += 2;
                     }
@@ -114,7 +115,7 @@ namespace ulib
                 break;
 
             default:
-                result += 2; // {}
+                result += 4; // null
                 break;
             }
 
@@ -317,9 +318,13 @@ namespace ulib
                 break;
 
             default:
-                *out = '{';
+                *out = 'n';
                 out++;
-                *out = '}';
+                *out = 'u';
+                out++;
+                *out = 'l';
+                out++;
+                *out = 'l';
                 out++;
                 break;
             }

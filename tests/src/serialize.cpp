@@ -112,3 +112,18 @@ TEST(Tree, SerializationEscape)
         ASSERT_EQ(value0.dump(), value1.dump());
     }
 }
+
+TEST(Tree, DumpEmptyTypes)
+{
+    ASSERT_EQ(ulib::json{}.dump(), "null");
+    ASSERT_EQ(ulib::json{ulib::json::value_t::null}.dump(), "null");
+    ASSERT_EQ(ulib::json{ulib::json::value_t::object}.dump(), "{}");
+    ASSERT_EQ(ulib::json{ulib::json::value_t::array}.dump(), "[]");
+    ASSERT_EQ(ulib::json{ulib::json::value_t::boolean}.dump(), "false");
+    ASSERT_EQ(ulib::json{ulib::json::value_t::integer}.dump(), "0");
+    ASSERT_EQ(ulib::json{ulib::json::value_t::floating}.dump(), "0.000000");
+    ASSERT_EQ(ulib::json{ulib::json::value_t::string}.dump(), "\"\"");
+
+    ASSERT_EQ(ulib::json::object().dump(), "{}");
+    ASSERT_EQ(ulib::json::array().dump(), "[]");
+}
