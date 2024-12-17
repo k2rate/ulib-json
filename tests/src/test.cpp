@@ -355,4 +355,32 @@ TEST(JsonTree, Removing)
     ASSERT_TRUE(value["one"].is_string());
     ASSERT_TRUE(value["two"].is_null());
     ASSERT_TRUE(value["three"].is_string());
-}   
+}
+
+TEST(JsonTree, Optional)
+{
+    std::optional<ulib::string> one = "one";
+    std::optional<ulib::string> two = std::nullopt;
+    std::optional<ulib::string> three = "three";
+
+    ulib::json value;
+    value["one"].assign(one);
+    value["two"].assign(two);
+    value["three"].assign(three);
+
+    ASSERT_TRUE(value["one"].get<ulib::string>() == "one");
+    ASSERT_TRUE(value["two"].type() == ulib::json::value_t::null);
+    ASSERT_TRUE(value["three"].try_get<ulib::string>() == "three");
+
+    std::optional<ulib::string> four = "four";
+    std::optional<ulib::string> five = std::nullopt;
+    std::optional<ulib::string> six = "six";
+
+    value["four"] = four;
+    value["five"] = five;
+    value["six"] = six;
+
+    ASSERT_TRUE(value["four"].get<ulib::string>() == "four");
+    ASSERT_TRUE(value["five"].is_null());
+    ASSERT_TRUE(value["six"].try_get<ulib::string>() == "six");
+}

@@ -318,6 +318,8 @@ namespace ulib
             throw json::exception(ulib::string{"json invalid get() type. expected: string. current: "} + type_to_string(mType));
         }
 
+        
+
         template <class T, std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
         reference operator=(T right)
         {
@@ -345,6 +347,31 @@ namespace ulib
 
         reference operator=(const_reference right);
         reference operator=(json &&right);
+
+
+        template<class T>
+        void assign(const std::optional<T>& right)
+        {
+            if (right)
+                assign(*right);
+            else
+                mType = value_t::null;
+        }
+
+        template<class T>
+        std::optional<T> try_get() const
+        {
+            if (mType == value_t::null)
+                return std::nullopt;
+
+            return get<T>();
+        }
+
+        template <class T>
+        reference operator=(const std::optional<T> &right)
+        {
+            return assign<std::optional<T>>(right), *this;
+        }
 
         // if value is exists, works like "at" otherwise creates value and set value type to undefined
         reference find_or_create(StringViewT name);
